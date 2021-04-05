@@ -7,14 +7,14 @@ from sklearn.cluster import KMeans
 def buildClusters():
     dataframe = pd.read_csv("Mall_Customers.csv")
     x = dataframe.iloc[:, [3,4]].values # Extract 2 specified columns
-
-    k_means = KMeans(n_clusters = 5, init = 'k-means++', max_iter = 300, n_init = 10, random_state = 69) # random state needs to be the same, n_clusters form prev function
+    k_means = KMeans(n_clusters = 5, init = 'k-means++', max_iter = 300, n_init = 10, random_state = 69) # random state needs to be the same, n_clusters from runKmeans()
     y_kmeans = k_means.fit_predict(x) # x,y coordinates of each sample
+
     plt.scatter(x[y_kmeans == 0, 0], x[y_kmeans == 0, 1], s = 100, c = 'red', label = 'Balanced')
     plt.scatter(x[y_kmeans == 1, 0], x[y_kmeans == 1, 1], s = 100, c = 'blue', label = 'Big-Spender')
-    plt.scatter(x[y_kmeans == 2, 0], x[y_kmeans == 2, 1], s = 100, c = 'green', label = 'Miser')
-    plt.scatter(x[y_kmeans == 3, 0], x[y_kmeans == 3, 1], s = 100, c = 'yellow', label = 'Reckless')
-    plt.scatter(x[y_kmeans == 4, 0], x[y_kmeans == 4, 1], s = 100, c = 'cyan', label = 'Poor')
+    plt.scatter(x[y_kmeans == 2, 0], x[y_kmeans == 2, 1], s = 100, c = 'green', label = 'Saver')
+    plt.scatter(x[y_kmeans == 3, 0], x[y_kmeans == 3, 1], s = 100, c = 'yellow', label = 'Reckless-Spender')
+    plt.scatter(x[y_kmeans == 4, 0], x[y_kmeans == 4, 1], s = 100, c = 'cyan', label = 'Low-Spender')
     plt.scatter(k_means.cluster_centers_[:,0], k_means.cluster_centers_[:,1], s = 50, c = "black", label = "Centroid")
     plt.xlabel("Annual Income")
     plt.ylabel("Spending score")
@@ -31,14 +31,12 @@ def runKmeans():
         k_means = KMeans(n_clusters = i, init = 'k-means++', max_iter = 300, n_init = 10, random_state = 69)
         k_means.fit(x)
         wcss_score.append(k_means.inertia_) # calculate the sum of the distances of all the points from the cluster centroid 
-    
     # plot graphs
     plt.plot(range(1,11), wcss_score)
     plt.title("K-means")
     plt.xlabel("N0. of Clusters")
     plt.ylabel("Score")
-    plt.show() # Between 2 & 3 will be optimal 
+    plt.show() 
     buildClusters()
-
 
 runKmeans()
